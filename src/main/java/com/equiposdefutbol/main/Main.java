@@ -21,7 +21,8 @@ public class Main {
         ///se ejecuta
          Connection connection = null;
          Statement sentencia = null;
-         ResultSet resultado = null;
+         ResultSet resultadoEquipos = null;
+         ResultSet resultadoJugadores = null;
          try {
             // Cargar el driver JDBC para MySQL
             Class.forName("com.mysql.jdbc.Driver");
@@ -35,23 +36,38 @@ public class Main {
             sentencia = connection.createStatement();
             
             // 3. Ejecutar la consulta SQL
-            resultado = sentencia.executeQuery("SELECT NOMBRE, DT, PUNTOS, PARTIDOS_JUGADOS FROM tpfjava.EQUIPO");
+            resultadoEquipos = sentencia.executeQuery("SELECT NOMBRE, DT, PUNTOS, PARTIDOS_JUGADOS FROM tpfjava.EQUIPO");
             
             // 4. Procesar los resultados de la consulta
             String nombre= "";
             String dt="";
             int puntos = 0;
             int partidosJugados = 0;
-            while (resultado.next()) {
-                 nombre = resultado.getString("NOMBRE");
-                 dt = resultado.getString("DT");
-                 puntos = resultado.getInt("PUNTOS");
-                 partidosJugados = resultado.getInt("PARTIDOS_JUGADOS");                
+            while (resultadoEquipos.next()) {
+                 nombre = resultadoEquipos.getString("NOMBRE");
+                 dt = resultadoEquipos.getString("DT");
+                 puntos = resultadoEquipos.getInt("PUNTOS");
+                 partidosJugados = resultadoEquipos.getInt("PARTIDOS_JUGADOS");                
+            }
+            
+            resultadoJugadores = sentencia.executeQuery("SELECT NOMBRE,EDAD FROM tpfjava.JUGADORES");
+            
+            // 4. Procesar los resultados de la consulta
+            String nombreJ= "";
+            int edad = 0;
+            while (resultadoJugadores.next()) {
+                 nombreJ = resultadoJugadores.getString("NOMBRE");
+                 edad = resultadoJugadores.getInt("EDAD");
             }
 
             System.out.println("Conexión exitosa a la base de datos MySQL");
-            System.out.println(nombre);
-            System.out.println(dt);
+            System.out.println("Equipo :"+nombre);
+            System.out.println("Director Tecnico : "+dt);
+            System.out.println(String.valueOf(puntos));
+            System.out.println(String.valueOf(partidosJugados));
+             System.out.println(nombreJ);
+             System.out.println(String.valueOf(edad));
+             
             
 
         } catch (ClassNotFoundException e) {
